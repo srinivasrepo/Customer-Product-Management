@@ -6,10 +6,12 @@ class Xyz extends Component {
             <div>
                 {/* <h6 style={{textAlign:"center"}}>Get XYZ stats in modules</h6> */}
                 {/* <button className={{btn, btnSuccess}} >bootstrap</button> */}
+                
             </div>
         );
     }
 }
 
 export default Xyz;
+
 

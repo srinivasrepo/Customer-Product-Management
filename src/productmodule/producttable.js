@@ -18,6 +18,9 @@ import Axios from "axios";
 import productmodule from "./productmodule";
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
+import * as jsPDF  from 'jspdf';
+import 'jspdf-autotable';
+import 'html2canvas';
 
 const StyledTableCell = withStyles(theme => ({
   head: {
@@ -115,10 +118,96 @@ const Producttable = props => {
     setBooledit(!booledit)
   };
 
+///// DOWNLOAD DATA
+  const downloaddata=()=>{
+    // const jsPDF = require('jspdf')
+    // const autoTable = require('jspdf-autotable')
+    const doc = new jsPDF();
+    var columns=["SNO","Code","Name","Cost","Status"]
+    var rows=[];
+    props.tabledata.map(data => {
+    // props.tabledata.forEach(element=>{
+      let prodid=data.productID;
+      let prodcode=data.productCode;
+      let prodname=data.productName;
+      let prodcost=data.productCost;
+      let prodstatus=data.status;
+      let temp=[prodid,prodcode,prodname,prodcost,prodstatus];
+      rows.push(temp)
+    // })
+   });
+   doc.autoTable(columns, rows, {
+    theme : 'grid',
+    styles: {
+        halign: 'left'
+    },
+    margin : {
+         top : 10
+    }			
+});
+    doc.save('tabledata.pdf')
+  
+  };
+
+
+
+////// DOWNLOAD PAGE IMAGE
+const downloadpage=()=>{
+ const jsPDF = require('jspdf')
+ const html2canvas = require('html2canvas');
+ console.log("starting position");
+ const input = document.getElementById("tablecontainer");
+ html2canvas(input)
+  .then((canvas) => {  
+  console.log("Inside Canvas Function");
+  
+  var imgWidth = 200;  
+  var pageHeight = 350;  
+  var imgHeight = canvas.height * imgWidth / canvas.width;  
+  var heightLeft = imgHeight;  
+  const imgData = canvas.toDataURL('image/png');  
+  const pdf = new jsPDF('p', 'mm', 'a4')  
+  var position = 0;  
+  var heightLeft = imgHeight;  
+  pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);  
+  pdf.save("download.pdf");  
+})
+};
+
+// TO DONLOAD IMAGE OR VIDEO
+{/* <img src="/images/myw3schoolsimage.jpg" alt="W3Schools" width="104" height="142"></img>
+<a href="/images/myw3schoolsimage.jpg" download="w3logo">
+  <button>Download Image</button>
+</a> */}
+
+
+
+///SCREENSHOT from capture-chrome package
+const capturescreenshot=()=>{
+  // const capture = require('capture-chrome');
+// const fs = require('fs');
+
+// const type;
+//   let thefile = {};
+//   this.pservice.downloadfile(this.rundata.name, type)
+//           .subscribe(data => thefile = new Blob([data], { type: "application/octet-stream" }), // console.log(data),
+//                                   error => console.log("Error downloading the file."),
+//                                   () => console.log('Completed file download.'));
+
+//   let url = window.URL.createObjectURL(thefile);
+//   window.open(url);
+}
+
   if (boolview === false && booledit === false) {
     return (
       <div>
-      <TableContainer component={Paper}>
+
+        <button class="btn btn-success" onClick= {()=>downloaddata()} >SAVE TABLE DATA</button> 
+       <span style={{paddingLeft:"10%"}}> <button   class="btn btn-primary" onClick= {()=>downloadpage()}>SAVE WEB PAGE</button> </span>
+       <span style={{paddingLeft:"10%"}}> <button   class="btn btn-secondary" onClick= {()=>capturescreenshot()}>TAKE SCREENSHOT </button> </span>
+        <br></br>
+        <br></br>
+      <TableContainer component={Paper} id="tablecontainer">
         <Table className={classes.table} aria-label="customized table">
           <TableHead>
             <TableRow>

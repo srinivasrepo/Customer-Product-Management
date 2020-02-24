@@ -45,6 +45,7 @@ class login extends Component {
 
   loginmethod(event) {
     event.preventDefault();
+    //admin , A1234
     console.log(this.state.username +" , "+ this.state.password)
     Axios
     .post("/ValidLogin",{UserName:this.state.username,Password:this.state.password})

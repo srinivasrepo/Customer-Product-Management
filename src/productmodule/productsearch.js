@@ -32,7 +32,9 @@ export default class Productsearch extends Component {
     this.handleChange = this.handleChange.bind(this);    
     this.searchbuttons = this.searchbuttons.bind(this);
     this.search = this.search.bind(this);
-    this.searchall = this.searchall.bind(this)
+    this.searchall = this.searchall.bind(this);
+    this.downloadpaper = this.downloadpaper.bind(this
+      )
   }
 
   handleChange(event){
@@ -107,15 +109,39 @@ export default class Productsearch extends Component {
   //   console.log(data)
   // )
   // }
-
+////// DOWNLOAD PAGE IMAGE
+downloadpaper=(event)=>{
+  event.preventDefault();
+  const jsPDF = require('jspdf')
+  const html2canvas = require('html2canvas');
+  console.log("starting position");
+  const input = document.getElementById("papercontainer");
+  html2canvas(input)
+   .then((canvas) => {  
+   console.log("Inside Canvas Function");
+   
+   var imgWidth = 200;  
+   var pageHeight = 400;  
+   var imgHeight = canvas.height * imgWidth / canvas.width;  
+   var heightLeft = imgHeight;  
+   const imgData = canvas.toDataURL('image/png');  
+   const pdf = new jsPDF('p', 'mm', 'a4')  
+   var position = 0;  
+   var heightLeft = imgHeight;  
+   pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);  
+   pdf.save("download.pdf");  
+ });
+}
   render() {
     var {  tabledata } = this.state;
     // var alert = useAlert();
 
     return (
       <div>
+         <span style={{paddingLeft:"10%"}}> <button   class="btn btn-primary" onClick= {this.downloadpaper} >SAVE PAPER</button> </span>
         {/* <button onClick={this.search} >Check </button> */}
-        <Container style={{ marginTop: "4%" }}>
+        <Container style={{ marginTop: "4%" }} id="papercontainer">
+       
           <Paper elevation={2} style={{ width: "100%" }}>
             <h5 style={{ textAlign: "center", paddingTop: "2%" }}>
               <span
@@ -217,6 +243,7 @@ export default class Productsearch extends Component {
                   </Link>
                 </Col>
               </Row>
+             
               <Producttable tabledata={tabledata} searchmethod={this.searchbuttons} />
             </Container>
           </Paper>
