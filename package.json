@@ -14,7 +14,7 @@
     "capture-chrome": "^3.0.1",
     "fs": "0.0.1-security",
     "html2canvas": "^1.0.0-rc.5",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "jspdf-autotable": "^3.2.13",
     "puppeteer": "^2.1.1",
     "react": "^16.12.0",
